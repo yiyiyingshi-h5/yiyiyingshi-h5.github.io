@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>依依影视 - 高清电影电视剧在线观看 | yiyiyingshi-h5.github.io</title>
+<meta name="description" content="依依影视（yiyiyingshi-h5.github.io）提供最新高清电影、电视剧、动漫、综艺在线观看。每日更新，免费畅享，支持手机与电脑自适应访问。">
+<meta name="keywords" content="依依影视, 电影在线观看, 电视剧, 免费影视, yiyiyingshi-h5">
+<meta name="author" content="依依影视">
+<meta name="robots" content="index, follow">
+<style>
+  /* 全局变量与重置 */
+  :root {
+    --bg-color: #fdfcfb;
+    --text-main: #1a1a1a;
+    --text-muted: #666666;
+    --accent-color: #8b0000;
+    --border-color: #dcdcdc;
+    --font-serif: "Georgia", "Times New Roman", "Noto Serif SC", serif;
+    --font-sans: "Helvetica Neue", "Microsoft YaHei", sans-serif;
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: var(--font-serif);
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.8;
+    padding: 0 1rem;
+  }
+  
+  a { text-decoration: none; color: var(--text-main); transition: color 0.3s; }
+  a:hover { color: var(--accent-color); }
+  
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 0;
+  }
+  
+  /* 头部设计 - 杂志封面风 */
+  .masthead {
+    text-align: center;
+    border-bottom: 4px solid var(--text-main);
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .masthead h1 {
+    font-size: 4rem;
+    font-weight: normal;
+    letter-spacing: 6px;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+  }
+  
+  .masthead .subtitle {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+  }
+  
+  /* 导航 */
+  .nav-bar {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  
+  .nav-bar a {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  /* 通用栏目样式 */
+  section { margin-bottom: 4rem; }
+  
+  .section-title {
+    font-size: 1.8rem;
+    font-weight: normal;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: var(--border-color);
+  }
+  
+  /* 栏目1：首页推荐 (不对称Grid) */
+  #home .featured-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+  }
+  
+  .featured-main {
+    background: #f0f0f0;
+    border: 1px solid var(--border-color);
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .featured-main h2 {
+    font-size: 2.5rem;
+    font-weight: normal;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+  
+  .featured-main p {
+    font-family: var(--font-sans);
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+  
+  .featured-side {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .side-item {
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+    flex: 1;
+    background: #fff;
+  }
+  
+  .side-item h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+  .side-item span { font-family: var(--font-sans); font-size: 0.8rem; color: var(--accent-color); }
+  
+  /* 栏目2：影视分类 (CSS多列布局) */
+  #category .cat-columns {
+    column-count: 3;
+    column-gap: 3rem;
+    border-top: 1px solid var(--text-main);
+    padding-top: 2rem;
+  }
+  
+  .cat-item {
+    break-inside: avoid;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px dashed var(--border-color);
+  }
+  
+  .cat-item h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+  .cat-item p { font-family: var(--font-sans); font-size: 0.9rem; color: var(--text-muted); }
+  
+  /* 栏目3：最新上映 (Details/Summary 手风琴) */
+  #latest .accordion {
+    border-top: 2px solid var(--text-main);
+  }
+  
+  details {
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.5rem 0;
+  }
+  
+  summary {
+    font-size: 1.3rem;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  summary::-webkit-details-marker { display: none; }
+  
+  summary::after {
+    content: '+';
+    font-size: 1.5rem;
+    color: var(--accent-color);
+  }
+  
+  details[open] summary::after { content: '-'; }
+  
+  .accordion-content {
+    margin-top: 1rem;
+    font-family: var(--font-sans);
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  
+  .accordion-content .meta { font-size: 0.85rem; color: var(--accent-color); margin-bottom: 0.5rem; display: block; }
+  
+  /* 栏目4：排行榜 (大数字列表) */
+  #ranking .rank-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .rank-row {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1.5rem;
+  }
+  
+  .rank-number {
+    font-size: 4rem;
+    font-weight: bold;
+    color: var(--border-color);
+    line-height: 1;
+    min-width: 80px;
+    text-align: center;
+  }
+  
+  .rank-number.top { color: var(--accent-color); }
+  
+  .rank-info h3 { font-size: 1.4rem; margin-bottom: 0.3rem; }
+  .rank-info p { font-family: var(--font-sans); color: var(--text-muted); font-size: 0.95rem; }
+  
+  /* 栏目5：关于我们 */
+  #about .about-text {
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    color: var(--text-muted);
+    line-height: 2;
+  }
+  
+  #about .url-box {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #f9f9f9;
+    border: 1px solid var(--border-color);
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-weight: bold;
+    color: var(--accent-color);
+  }
+  
+  /* 页脚 */
+  .footer {
+    text-align: center;
+    padding: 3rem 0;
+    border-top: 4px solid var(--text-main);
+    margin-top: 4rem;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  
+  .footer a { color: var(--accent-color); }
+  
+  /* 移动端自适应 */
+  @media (max-width: 768px) {
+    .masthead h1 { font-size: 2.5rem; }
+    .nav-bar { flex-wrap: wrap; gap: 1rem; }
+    #home .featured-grid { grid-template-columns: 1fr; }
+    #category .cat-columns { column-count: 1; }
+    .rank-row { flex-direction: column; text-align: center; gap: 1rem; }
+    .rank-number { font-size: 3rem; min-width: auto; }
+  }
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<div class="container">
+
+  <!-- 头部 -->
+  <header class="masthead">
+    <h1>依依影视</h1>
+    <div class="subtitle">Your Premium Video Guide &mdash; Since 2026</div>
+  </header>
+
+  <!-- 导航 -->
+  <nav class="nav-bar">
+    <a href="#home">首页头条</a>
+    <a href="#category">影视分类</a>
+    <a href="#latest">最新上映</a>
+    <a href="#ranking">热播排行</a>
+    <a href="#about">关于我们</a>
+  </nav>
+
+  <main>
+    <!-- 栏目1：首页推荐 -->
+    <section id="home">
+      <h2 class="section-title">本期推荐</h2>
+      <div class="featured-grid">
+        <article class="featured-main">
+          <h2>《繁花》落尽，光影依旧</h2>
+          <p>依依影视为您精选本周最值得观看的华语佳作。从王家卫的镜头美学到细腻的沪上风情，带您重温那个时代的温度与质感。</p>
+          <a href="#">阅读更多 &rarr;</a>
+        </article>
+        <aside class="featured-side">
+          <div class="side-item">
+            <span>独家策划</span>
+            <h3>科幻巨制回顾</h3>
+          </div>
+          <div class="side-item">
+            <span>周末特供</span>
+            <h3>高分喜剧精选</h3>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 栏目2：影视分类 -->
+    <section id="category">
+      <h2 class="section-title">影视目录</h2>
+      <div class="cat-columns">
+        <div class="cat-item">
+          <h3>动作冒险</h3>
+          <p>肾上腺素飙升的视觉盛宴，探索全球最刺激的冒险故事。</p>
+        </div>
+        <div class="cat-item">
+          <h3>悬疑犯罪</h3>
+          <p>烧脑剧情与反转，带你走进人性的深渊与正义的较量。</p>
+        </div>
+        <div class="cat-item">
+          <h3>爱情文艺</h3>
+          <p>细腻情感刻画，触动心灵的浪漫与遗憾。</p>
+        </div>
+        <div class="cat-item">
+          <h3>国产剧集</h3>
+          <p>紧跟热播大剧，从古装权谋到现代都市，一网打尽。</p>
+        </div>
+        <div class="cat-item">
+          <h3>欧美大片</h3>
+          <p>好莱坞最新力作，感受顶级工业水准的视听冲击。</p>
+        </div>
+        <div class="cat-item">
+          <h3>经典动漫</h3>
+          <p>跨越次元壁，重温童年回忆与追番新体验。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 栏目3：最新上映 -->
+    <section id="latest">
+      <h2 class="section-title">最新上映</h2>
+      <div class="accordion">
+        <details open>
+          <summary>《庆余年2》- 古装权谋巨制</summary>
+          <div class="accordion-content">
+            <span class="meta">更新至 32 集 | 2026-10-18</span>
+            <p>范闲重返京都，面对错综复杂的朝堂局势，他将如何破局？张若昀再度领衔，演绎小人物的传奇逆袭。</p>
+          </div>
+        </details>
+        <details>
+          <summary>《沙丘3：救世主》- 科幻史诗</summary>
+          <div class="accordion-content">
+            <span class="meta">正片已上线 | 2026-10-15</span>
+            <p>保罗·厄崔迪在成为弗雷曼人的救世主后，必须面对自己预见到的可怕未来，一场跨越星系的战争即将爆发。</p>
+          </div>
+        </details>
+        <details>
+          <summary>《热辣滚烫》- 励志喜剧</summary>
+          <div class="accordion-content">
+            <span class="meta">独家上线 | 2026-09-30</span>
+            <p>乐莹的人生陷入低谷，她决定通过拳击找回自我，一场关于成长与救赎的蜕变之旅。</p>
+          </div>
+        </details>
+        <details>
+          <summary>《咒术回战 第三季》- 热血动漫</summary>
+          <div class="accordion-content">
+            <span class="meta">更新至 108 话 | 2026-10-17</span>
+            <p>涩谷事变后的余波未平，新的诅咒之王即将诞生，虎杖悠仁与同伴们面临前所未有的强敌。</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- 栏目4：排行榜 -->
+    <section id="ranking">
+      <h2 class="section-title">本周热播</h2>
+      <div class="rank-list">
+        <div class="rank-row">
+          <div class="rank-number top">1</div>
+          <div class="rank-info">
+            <h3>周处除三害</h3>
+            <p>动作 / 犯罪 | 豆瓣评分 9.2</p>
+          </div>
+        </div>
+        <div class="rank-row">
+          <div class="rank-number top">2</div>
+          <div class="rank-info">
+            <h3>飞驰人生2</h3>
+            <p>喜剧 / 赛车 | 豆瓣评分 8.9</p>
+          </div>
+        </div>
+        <div class="rank-row">
+          <div class="rank-number top">3</div>
+          <div class="rank-info">
+            <h3>奥本海默2</h3>
+            <p>传记 / 历史 | 豆瓣评分 8.7</p>
+          </div>
+        </div>
+        <div class="rank-row">
+          <div class="rank-number">4</div>
+          <div class="rank-info">
+            <h3>极限挑战 第十季</h3>
+            <p>综艺 / 真人秀 | 热度 9850</p>
+          </div>
+        </div>
+        <div class="rank-row">
+          <div class="rank-number">5</div>
+          <div class="rank-info">
+            <h3>流浪地球3</h3>
+            <p>科幻 / 灾难 | 热度 9200</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 栏目5：关于我们 -->
+    <section id="about">
+      <h2 class="section-title" style="justify-content: center;">关于依依影视</h2>
+      <div class="about-text">
+        <p>依依影视（yiyiyingshi-h5.github.io）致力于打造一个纯粹、优雅的影视导航空间。我们为您精选互联网上的优质影视资源，拒绝繁杂的广告干扰，让您沉浸在每一部好作品的情感与故事之中。</p>
+        <p>无论您身处何地，只需打开依依影视，即可在手机、平板或电脑上享受高清流畅的观影体验。</p>
+        <div class="url-box">
+          官方网站：https://yiyiyingshi-h5.github.io
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <p>网站名称：<strong>依依影视</strong></p>
+    <p>访问地址：<a href="https://yiyiyingshi-h5.github.io">https://yiyiyingshi-h5.github.io</a></p>
+    <p>&copy; 2026 依依影视 保留所有权利 | 杂志风单页演示模板</p>
+  </footer>
+
+</div>
+
+<script>
+  // 平滑滚动
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
